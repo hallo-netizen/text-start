@@ -14,7 +14,8 @@ class StartDoorTests(unittest.TestCase):
         self.assertEqual(result["target_repository"], "hallo-netizen/affiliate-pferdeportal")
         self.assertEqual(result["target_ref"], "main")
         self.assertEqual(result["target_workflow"], "text-start-pferdeatelier.yml")
-        self.assertEqual(result["canonical_start_command"], "python3 isolated_system4/parent_start.py start-current-bound")
+        self.assertEqual(result["target_start_contract"], "CURRENT_PROJECT_1_TO_N")
+        self.assertEqual(result["current_assignment_resolution"], "TARGET_RECEIVER_AT_RUN_TIME")
         self.assertEqual(result["article_content_authority"], "NONE")
         self.assertEqual(result["quality_rule_authority"], "NONE")
 
@@ -37,8 +38,9 @@ class StartDoorTests(unittest.TestCase):
                     with self.assertRaises(start.Blocked):
                         start.authorize("pferdeatelier")
 
-    def test_tampered_command_blocked(self):
-        self._tampered("canonical_start_command", "python3 something_else.py", "PFERDEATELIER_COMMAND_DRIFT")
+    def test_tampered_current_assignment_contract_blocked(self):
+        self._tampered("target_start_contract", "FIXED_BATCH", "PROJECT_BINDING_INVALID:target_start_contract")
+        self._tampered("current_assignment_resolution", "STATIC", "PROJECT_BINDING_INVALID:current_assignment_resolution")
 
     def test_tampered_target_workflow_blocked(self):
         self._tampered("target_workflow", "anything.yml", "PFERDEATELIER_WORKFLOW_DRIFT")
