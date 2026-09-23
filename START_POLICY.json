@@ -1,0 +1,14 @@
+{
+  "contract": "TEXT_START_CENTRAL_V1",
+  "mode": "START_ONLY",
+  "free_target_selection": false,
+  "free_command_selection": false,
+  "free_branch_selection": false,
+  "production_logic_authority": "NONE",
+  "article_content_authority": "NONE",
+  "quality_rule_authority": "NONE",
+  "publish_authority": "NONE",
+  "allowed_projects": [
+    "pferdeatelier"
+  ]
+}
