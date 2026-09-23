@@ -1,0 +1,65 @@
+name: text-start door
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  door:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fixed start door
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Run hard tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Resolve request
+        id: request
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            project="pferdeatelier"
+          else
+            case "$ISSUE_TITLE" in
+              "START:pferdeatelier") project="pferdeatelier" ;;
+              *) echo "Unsupported start request"; exit 2 ;;
+            esac
+          fi
+          python3 start.py start "$project" | tee START_AUTHORIZATION.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open("START_AUTHORIZATION.json", encoding="utf-8"))
+          if data.get("status") != "START_AUTHORIZED":
+              raise SystemExit("START_NOT_AUTHORIZED")
+          PY
+          echo "project=$project" >> "$GITHUB_OUTPUT"
+
+      - name: Upload immutable start authorization
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: start-authorization-${{ steps.request.outputs.project }}
+          path: START_AUTHORIZATION.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Mark issue authorized
+        if: github.event_name == 'issues'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'START_AUTHORIZED: ' + '${{ steps.request.outputs.project }}' + '\nRUN_ID: ' + context.runId
+            })
