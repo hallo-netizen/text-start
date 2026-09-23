@@ -99,8 +99,10 @@ jobs:
               raise SystemExit("TARGET_REF_DRIFT")
           if a["target_workflow"] != "text-start-pferdeatelier.yml":
               raise SystemExit("TARGET_WORKFLOW_DRIFT")
-          if a["canonical_start_command"] != "python3 isolated_system4/parent_start.py start-current-bound":
-              raise SystemExit("TARGET_COMMAND_DRIFT")
+          if a["target_start_contract"] != "CURRENT_PROJECT_1_TO_N":
+              raise SystemExit("TARGET_START_CONTRACT_DRIFT")
+          if a["current_assignment_resolution"] != "TARGET_RECEIVER_AT_RUN_TIME":
+              raise SystemExit("CURRENT_ASSIGNMENT_RESOLUTION_DRIFT")
           PY
           body="$(python3 - <<'PY'
           import json, os
