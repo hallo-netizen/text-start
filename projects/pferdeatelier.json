@@ -5,7 +5,7 @@
   "target_ref": "main",
   "target_workflow": "text-start-pferdeatelier.yml",
   "start_mode": "FIXED_SINGLE_START",
-  "canonical_start_command": "python3 isolated_system4/parent_start.py start-current-bound",
+  "canonical_start_command": "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json",
   "free_parameters": false,
   "article_content_rules_changed": false,
   "quality_rules_changed": false,
