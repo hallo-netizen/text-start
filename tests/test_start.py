@@ -14,7 +14,7 @@ class StartDoorTests(unittest.TestCase):
         self.assertEqual(result["target_repository"], "hallo-netizen/affiliate-pferdeportal")
         self.assertEqual(result["target_ref"], "main")
         self.assertEqual(result["target_workflow"], "text-start-pferdeatelier.yml")
-        self.assertEqual(result["canonical_start_command"], "python3 isolated_system4/parent_start.py start-current-bound")
+        self.assertEqual(result["canonical_start_command"], "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json")
         self.assertEqual(result["article_content_authority"], "NONE")
         self.assertEqual(result["quality_rule_authority"], "NONE")
 

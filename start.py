@@ -75,7 +75,7 @@ def authorize(project_id: str) -> dict:
             raise Blocked("PFERDEATELIER_REF_DRIFT")
         if target_workflow != "text-start-pferdeatelier.yml":
             raise Blocked("PFERDEATELIER_WORKFLOW_DRIFT")
-        if command != "python3 isolated_system4/parent_start.py start-current-bound":
+        if command != "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json":
             raise Blocked("PFERDEATELIER_COMMAND_DRIFT")
 
     return {
