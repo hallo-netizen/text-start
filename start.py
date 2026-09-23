@@ -63,14 +63,18 @@ def authorize(project_id: str) -> dict:
 
     target_repository = str(project.get("target_repository") or "")
     target_ref = str(project.get("target_ref") or "")
+    target_workflow = str(project.get("target_workflow") or "")
     command = str(project.get("canonical_start_command") or "")
-    if not target_repository or not target_ref or not command:
+    if not target_repository or not target_ref or not target_workflow or not command:
         raise Blocked("PROJECT_TARGET_INCOMPLETE")
+
     if project_id == "pferdeatelier":
         if target_repository != "hallo-netizen/affiliate-pferdeportal":
             raise Blocked("PFERDEATELIER_REPOSITORY_DRIFT")
         if target_ref != "main":
             raise Blocked("PFERDEATELIER_REF_DRIFT")
+        if target_workflow != "text-start-pferdeatelier.yml":
+            raise Blocked("PFERDEATELIER_WORKFLOW_DRIFT")
         if command != "python3 isolated_system4/parent_start.py start-current-bound":
             raise Blocked("PFERDEATELIER_COMMAND_DRIFT")
 
@@ -80,6 +84,7 @@ def authorize(project_id: str) -> dict:
         "project_id": project_id,
         "target_repository": target_repository,
         "target_ref": target_ref,
+        "target_workflow": target_workflow,
         "canonical_start_command": command,
         "free_parameters": False,
         "production_logic_authority": "NONE",
