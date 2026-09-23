@@ -48,9 +48,11 @@ def authorize(project_id: str) -> dict:
     project = load(project_path)
 
     expected = {
-        "contract": "TEXT_START_PROJECT_V1",
+        "contract": "TEXT_START_PROJECT_V2",
         "project_id": project_id,
-        "start_mode": "FIXED_SINGLE_START",
+        "start_mode": "FIXED_PROJECT_START",
+        "target_start_contract": "CURRENT_PROJECT_1_TO_N",
+        "current_assignment_resolution": "TARGET_RECEIVER_AT_RUN_TIME",
         "free_parameters": False,
         "article_content_rules_changed": False,
         "quality_rules_changed": False,
@@ -64,8 +66,7 @@ def authorize(project_id: str) -> dict:
     target_repository = str(project.get("target_repository") or "")
     target_ref = str(project.get("target_ref") or "")
     target_workflow = str(project.get("target_workflow") or "")
-    command = str(project.get("canonical_start_command") or "")
-    if not target_repository or not target_ref or not target_workflow or not command:
+    if not target_repository or not target_ref or not target_workflow:
         raise Blocked("PROJECT_TARGET_INCOMPLETE")
 
     if project_id == "pferdeatelier":
@@ -75,17 +76,16 @@ def authorize(project_id: str) -> dict:
             raise Blocked("PFERDEATELIER_REF_DRIFT")
         if target_workflow != "text-start-pferdeatelier.yml":
             raise Blocked("PFERDEATELIER_WORKFLOW_DRIFT")
-        if command != "python3 isolated_system4/parent_start.py start-current-bound":
-            raise Blocked("PFERDEATELIER_COMMAND_DRIFT")
 
     return {
-        "contract": "TEXT_START_AUTHORIZATION_V1",
+        "contract": "TEXT_START_AUTHORIZATION_V2",
         "status": "START_AUTHORIZED",
         "project_id": project_id,
         "target_repository": target_repository,
         "target_ref": target_ref,
         "target_workflow": target_workflow,
-        "canonical_start_command": command,
+        "target_start_contract": "CURRENT_PROJECT_1_TO_N",
+        "current_assignment_resolution": "TARGET_RECEIVER_AT_RUN_TIME",
         "free_parameters": False,
         "production_logic_authority": "NONE",
         "article_content_authority": "NONE",
