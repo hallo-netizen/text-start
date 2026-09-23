@@ -99,7 +99,7 @@ jobs:
               raise SystemExit("TARGET_REF_DRIFT")
           if a["target_workflow"] != "text-start-pferdeatelier.yml":
               raise SystemExit("TARGET_WORKFLOW_DRIFT")
-          if a["canonical_start_command"] != "python3 isolated_system4/parent_start.py start-current-bound":
+          if a["canonical_start_command"] != "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json":
               raise SystemExit("TARGET_COMMAND_DRIFT")
           PY
           body="$(python3 - <<'PY'
