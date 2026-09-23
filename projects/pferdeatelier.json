@@ -1,0 +1,13 @@
+{
+  "contract": "TEXT_START_PROJECT_V1",
+  "project_id": "pferdeatelier",
+  "target_repository": "hallo-netizen/affiliate-pferdeportal",
+  "target_ref": "main",
+  "start_mode": "FIXED_SINGLE_START",
+  "canonical_start_command": "python3 isolated_system4/parent_start.py start-current-bound",
+  "free_parameters": false,
+  "article_content_rules_changed": false,
+  "quality_rules_changed": false,
+  "production_logic_changed": false,
+  "publish_allowed": false
+}
