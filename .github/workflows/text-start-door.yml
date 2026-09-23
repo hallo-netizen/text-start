@@ -12,6 +12,8 @@ permissions:
 jobs:
   door:
     runs-on: ubuntu-latest
+    env:
+      TARGET_TOKEN: ${{ secrets.TEXT_START_TARGET_TOKEN }}
     steps:
       - name: Checkout fixed start door
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -68,7 +70,7 @@ jobs:
             })
 
       - name: Mark target dispatch requested
-        if: github.event_name == 'issues' && ${{ secrets.TEXT_START_TARGET_TOKEN != '' }}
+        if: github.event_name == 'issues' && env.TARGET_TOKEN != ''
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
@@ -80,9 +82,9 @@ jobs:
             })
 
       - name: Dispatch fixed Pferdeatelier receiver
-        if: ${{ secrets.TEXT_START_TARGET_TOKEN != '' }}
+        if: github.event_name == 'issues' && env.TARGET_TOKEN != ''
         env:
-          GH_TOKEN: ${{ secrets.TEXT_START_TARGET_TOKEN }}
+          GH_TOKEN: ${{ env.TARGET_TOKEN }}
           SOURCE_RUN_ID: ${{ github.run_id }}
           SOURCE_ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
         shell: bash
@@ -106,7 +108,7 @@ jobs:
             "ref": "main",
             "inputs": {
               "source_run_id": os.environ["SOURCE_RUN_ID"],
-              "source_issue_number": os.environ.get("SOURCE_ISSUE_NUMBER", "")
+              "source_issue_number": os.environ["SOURCE_ISSUE_NUMBER"]
             }
           }, separators=(",", ":")))
           PY
@@ -120,5 +122,5 @@ jobs:
             -d "$body"
 
       - name: Bridge status without target token
-        if: ${{ secrets.TEXT_START_TARGET_TOKEN == '' }}
+        if: github.event_name == 'issues' && env.TARGET_TOKEN == ''
         run: echo "BRIDGE_PENDING_TARGET_TOKEN"
