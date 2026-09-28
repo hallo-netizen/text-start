@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             project="pferdeatelier"
-            issue_number=""
+            issue_number="0"
           else
             case "$ISSUE_TITLE" in
               "START:pferdeatelier") project="pferdeatelier" ;;
@@ -82,7 +82,7 @@ jobs:
             })
 
       - name: Dispatch fixed Pferdeatelier receiver
-        if: github.event_name == 'issues' && env.TARGET_TOKEN != ''
+        if: env.TARGET_TOKEN != ''
         env:
           GH_TOKEN: ${{ env.TARGET_TOKEN }}
           SOURCE_RUN_ID: ${{ github.run_id }}
@@ -95,7 +95,7 @@ jobs:
           a=json.load(open("START_AUTHORIZATION.json", encoding="utf-8"))
           if a["target_repository"] != "hallo-netizen/affiliate-pferdeportal":
               raise SystemExit("TARGET_REPOSITORY_DRIFT")
-          if a["target_ref"] != "main":
+          if a["target_ref"] != "konzept7/hard-worker-completion-20260928":
               raise SystemExit("TARGET_REF_DRIFT")
           if a["target_workflow"] != "text-start-pferdeatelier.yml":
               raise SystemExit("TARGET_WORKFLOW_DRIFT")
@@ -105,7 +105,7 @@ jobs:
           body="$(python3 - <<'PY'
           import json, os
           print(json.dumps({
-            "ref": "main",
+            "ref": "konzept7/hard-worker-completion-20260928",
             "inputs": {
               "source_run_id": os.environ["SOURCE_RUN_ID"],
               "source_issue_number": os.environ["SOURCE_ISSUE_NUMBER"]
@@ -122,5 +122,5 @@ jobs:
             -d "$body"
 
       - name: Bridge status without target token
-        if: github.event_name == 'issues' && env.TARGET_TOKEN == ''
+        if: env.TARGET_TOKEN == ''
         run: echo "BRIDGE_PENDING_TARGET_TOKEN"
