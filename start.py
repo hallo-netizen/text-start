@@ -71,7 +71,7 @@ def authorize(project_id: str) -> dict:
     if project_id == "pferdeatelier":
         if target_repository != "hallo-netizen/affiliate-pferdeportal":
             raise Blocked("PFERDEATELIER_REPOSITORY_DRIFT")
-        if target_ref != "main":
+        if target_ref != "konzept7/hard-worker-completion-20260928":
             raise Blocked("PFERDEATELIER_REF_DRIFT")
         if target_workflow != "text-start-pferdeatelier.yml":
             raise Blocked("PFERDEATELIER_WORKFLOW_DRIFT")
