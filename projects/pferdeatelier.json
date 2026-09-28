@@ -2,7 +2,7 @@
   "contract": "TEXT_START_PROJECT_V1",
   "project_id": "pferdeatelier",
   "target_repository": "hallo-netizen/affiliate-pferdeportal",
-  "target_ref": "main",
+  "target_ref": "konzept7/hard-worker-completion-20260928",
   "target_workflow": "text-start-pferdeatelier.yml",
   "start_mode": "FIXED_SINGLE_START",
   "canonical_start_command": "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json",
