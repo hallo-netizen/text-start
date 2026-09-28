@@ -95,17 +95,17 @@ jobs:
           a=json.load(open("START_AUTHORIZATION.json", encoding="utf-8"))
           if a["target_repository"] != "hallo-netizen/affiliate-pferdeportal":
               raise SystemExit("TARGET_REPOSITORY_DRIFT")
-          if a["target_ref"] != "main":
+          if a["target_ref"] != "konzept8-verbot/working-copy-20260928":
               raise SystemExit("TARGET_REF_DRIFT")
           if a["target_workflow"] != "text-start-pferdeatelier.yml":
               raise SystemExit("TARGET_WORKFLOW_DRIFT")
-          if a["canonical_start_command"] != "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json":
+          if a["canonical_start_command"] != "python3 concept_agent/konzept8_verbot/k8_start_bridge.py start concept_agent/current/PSERC_METADATA_SNAPSHOT.json concept_agent/current/CONCEPT_AGENT_RESEARCH_BOUND.json K8_STATE":
               raise SystemExit("TARGET_COMMAND_DRIFT")
           PY
           body="$(python3 - <<'PY'
           import json, os
           print(json.dumps({
-            "ref": "main",
+            "ref": "konzept8-verbot/working-copy-20260928",
             "inputs": {
               "source_run_id": os.environ["SOURCE_RUN_ID"],
               "source_issue_number": os.environ["SOURCE_ISSUE_NUMBER"]

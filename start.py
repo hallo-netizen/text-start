@@ -71,11 +71,11 @@ def authorize(project_id: str) -> dict:
     if project_id == "pferdeatelier":
         if target_repository != "hallo-netizen/affiliate-pferdeportal":
             raise Blocked("PFERDEATELIER_REPOSITORY_DRIFT")
-        if target_ref != "main":
+        if target_ref != "konzept8-verbot/working-copy-20260928":
             raise Blocked("PFERDEATELIER_REF_DRIFT")
         if target_workflow != "text-start-pferdeatelier.yml":
             raise Blocked("PFERDEATELIER_WORKFLOW_DRIFT")
-        if command != "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json":
+        if command != "python3 concept_agent/konzept8_verbot/k8_start_bridge.py start concept_agent/current/PSERC_METADATA_SNAPSHOT.json concept_agent/current/CONCEPT_AGENT_RESEARCH_BOUND.json K8_STATE":
             raise Blocked("PFERDEATELIER_COMMAND_DRIFT")
 
     return {
