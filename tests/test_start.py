@@ -12,9 +12,9 @@ class StartDoorTests(unittest.TestCase):
         result = start.authorize("pferdeatelier")
         self.assertEqual(result["status"], "START_AUTHORIZED")
         self.assertEqual(result["target_repository"], "hallo-netizen/affiliate-pferdeportal")
-        self.assertEqual(result["target_ref"], "main")
+        self.assertEqual(result["target_ref"], "konzept8-verbot/working-copy-20260928")
         self.assertEqual(result["target_workflow"], "text-start-pferdeatelier.yml")
-        self.assertEqual(result["canonical_start_command"], "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json")
+        self.assertEqual(result["canonical_start_command"], "python3 concept_agent/konzept8_verbot/k8_start_bridge.py start concept_agent/current/PSERC_METADATA_SNAPSHOT.json concept_agent/current/CONCEPT_AGENT_RESEARCH_BOUND.json K8_STATE")
         self.assertEqual(result["article_content_authority"], "NONE")
         self.assertEqual(result["quality_rule_authority"], "NONE")
 
@@ -39,6 +39,9 @@ class StartDoorTests(unittest.TestCase):
 
     def test_tampered_command_blocked(self):
         self._tampered("canonical_start_command", "python3 something_else.py", "PFERDEATELIER_COMMAND_DRIFT")
+
+    def test_tampered_target_ref_blocked(self):
+        self._tampered("target_ref", "main", "PFERDEATELIER_REF_DRIFT")
 
     def test_tampered_target_workflow_blocked(self):
         self._tampered("target_workflow", "anything.yml", "PFERDEATELIER_WORKFLOW_DRIFT")
