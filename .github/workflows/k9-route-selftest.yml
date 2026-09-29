@@ -1,0 +1,31 @@
+name: K9 one-time route selftest
+on:
+  push:
+    branches: [konzept9/isolated-start-20260929]
+permissions:
+  contents: read
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    env:
+      TARGET_TOKEN: ${{ secrets.TEXT_START_TARGET_TOKEN }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: |
+          test -f START_CONTRACT.json
+          test ! -e projects
+          test ! -e start.py
+      - name: Dispatch harmless empty-ledger K9 research probe
+        env:
+          GH_TOKEN: ${{ env.TARGET_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN"
+          printf '%s' '{"ref":"konzept9/greenfield-20260929","inputs":{"station":"research","batch_size":"1"}}' > body.json
+          curl --fail-with-body --silent --show-error -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/hallo-netizen/affiliate-pferdeportal/actions/workflows/text-start-pferdeatelier.yml/dispatches \
+            -d @body.json
