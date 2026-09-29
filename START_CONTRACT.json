@@ -1,0 +1,9 @@
+{
+  "contract": "K9_ISOLATED_START_V1",
+  "target_repository": "hallo-netizen/affiliate-pferdeportal",
+  "target_ref": "konzept9/greenfield-20260929",
+  "target_workflow": "text-start-pferdeatelier.yml",
+  "allowed_stations": ["research", "write", "check", "repair"],
+  "automatic_cross_station_chaining": false,
+  "legacy_routing_allowed": false
+}
