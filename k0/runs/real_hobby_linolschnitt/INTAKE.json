@@ -1,0 +1,12 @@
+{
+  "contract": "K0_CENTRAL_INTAKE_V1",
+  "portal_key": "hobbydepot",
+  "item": {
+    "article_type": "Beratung",
+    "category": "linolschnitt",
+    "plan_slot": "1111111111111111111111111111111111111111111111111111111111111111",
+    "target_keyword": "Was braucht man für Linolschnitt",
+    "title": "Was braucht man für Linolschnitt?"
+  },
+  "publish_allowed": false
+}

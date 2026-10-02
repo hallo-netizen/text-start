@@ -1,0 +1,43 @@
+{
+  "contract": "K0_RESEARCH_V1",
+  "portal_key": "hobbydepot",
+  "plan_slot": "1111111111111111111111111111111111111111111111111111111111111111",
+  "sources": [
+    {
+      "title": "V&A – What is print? Linocut printing",
+      "url": "https://www.vam.ac.uk/articles/what-is-print"
+    },
+    {
+      "title": "MoMA – Linoleum cut",
+      "url": "https://www.moma.org/collection/works/66132"
+    },
+    {
+      "title": "The Met – Claude Flight: Breaking Waves",
+      "url": "https://www.metmuseum.org/art/collection/search/832649"
+    }
+  ],
+  "claims": [
+    {
+      "fact_id": "L1",
+      "source_url": "https://www.vam.ac.uk/articles/what-is-print",
+      "evidence_text": "Linolschnitt ist ein Hochdruckverfahren, bei dem Linoleum als Druckstock verwendet wird; weggeschnittene Bereiche drucken nicht, stehen gebliebene Bereiche nehmen Farbe an.",
+      "evidence_text_sha256": "53d1df98c9d8bcb9f547af6fe4be468eaa0ddb0d89a8ca9cb7be91e05ce9e2d1",
+      "statement": "Linolschnitt arbeitet als Hochdruck mit einer geschnittenen Linoleumplatte."
+    },
+    {
+      "fact_id": "L2",
+      "source_url": "https://www.moma.org/collection/works/66132",
+      "evidence_text": "Linoleum ist weicher und leichter zu schneiden als Holz, wodurch es sich gut für klar abgegrenzte Flächen und den Einstieg in den Reliefdruck eignet.",
+      "evidence_text_sha256": "646bf6035f425923a40b6c1ea36cce507d246f5357e97edb0b2de8a0eb031306",
+      "statement": "Linoleum ist gegenüber Holz vergleichsweise leicht zu schneiden."
+    },
+    {
+      "fact_id": "L3",
+      "source_url": "https://www.metmuseum.org/art/collection/search/832649",
+      "evidence_text": "Museumsquellen beschreiben Linolschnitt als Reliefdruck; die einfache Bearbeitbarkeit des Materials begünstigt flächige Formen und verschiedene Druckeffekte.",
+      "evidence_text_sha256": "6e17a74366fd01fe0b670cd310f77335f36d77250a5c793e5fcf117ff75b3c3d",
+      "statement": "Klare Flächen und vereinfachte Formen eignen sich gut für Linolschnitt."
+    }
+  ],
+  "publish_allowed": false
+}
