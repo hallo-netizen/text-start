@@ -26,7 +26,7 @@
     "native_production_core_commit": "ccadff0d7e56e1bb9450d260002080c99325b0f7",
     "portal_category_guard_commit": "1c0374d5b00c36cb1362b57402c8cfcd15a4c12d",
     "final_fixture_fix_commit": "90d1404f8b94a62527d2a9d784385319d9e78d02",
-    "latest_isolated_selftest_run_id": 37000387310,
+    "latest_isolated_selftest_run_id": 37000515476,
     "latest_isolated_selftest_result": "SUCCESS",
     "isolation_guard": "PASS",
     "real_positive_runs": [
