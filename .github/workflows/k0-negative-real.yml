@@ -1,0 +1,43 @@
+name: K0 real negative isolation
+
+on:
+  push:
+    branches: [k0-campus-central-20261002]
+    paths:
+      - 'k0/negative_runs/**'
+
+permissions:
+  contents: read
+
+jobs:
+  k0-negative:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 2
+
+      - name: Verify K0 isolation
+        run: python3 -c "from k0.engine.isolation_guard import check; print(check())"
+
+      - name: Resolve exactly one negative run
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t dirs < <(git diff --name-only HEAD^ HEAD -- 'k0/negative_runs/**' | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}' | sort -u)
+          test "${#dirs[@]}" -eq 1 || { echo "K0_EXACTLY_ONE_NEGATIVE_RUN_REQUIRED:${#dirs[@]}"; exit 2; }
+          echo "RUN_DIR=${dirs[0]}" >> "$GITHUB_ENV"
+
+      - name: Require fail-closed portal mismatch
+        shell: bash
+        run: |
+          set +e
+          mkdir -p /tmp/k0-negative
+          python3 -m k0.engine.production "$RUN_DIR" k0/portals /tmp/k0-negative > /tmp/k0-negative.log 2>&1
+          rc=$?
+          set -e
+          cat /tmp/k0-negative.log
+          test "$rc" -ne 0 || { echo "K0_NEGATIVE_UNEXPECTED_PASS"; exit 2; }
+          grep -q 'CATEGORY_NOT_ALLOWED_FOR_PORTAL:naturwissenschaft' /tmp/k0-negative.log
+          echo "K0_NEGATIVE_EXPECTED_BLOCK_PASS"
