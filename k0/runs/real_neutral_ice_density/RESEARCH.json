@@ -1,0 +1,43 @@
+{
+  "contract": "K0_RESEARCH_V1",
+  "portal_key": "neutraltest",
+  "plan_slot": "3333333333333333333333333333333333333333333333333333333333333333",
+  "sources": [
+    {
+      "title": "U.S. Geological Survey – Water Density",
+      "url": "https://www.usgs.gov/water-science-school/science/water-density"
+    },
+    {
+      "title": "Yale – Water as a Molecule",
+      "url": "https://watermanagement.yale.edu/topics/water-science/water-as-a-molecule/"
+    },
+    {
+      "title": "Lunar and Planetary Institute – The Tip of the Iceberg",
+      "url": "https://www.lpi.usra.edu/education/explore/ice/activities/ice_action/iceberg/"
+    }
+  ],
+  "claims": [
+    {
+      "fact_id": "I1",
+      "source_url": "https://www.usgs.gov/water-science-school/science/water-density",
+      "evidence_text": "Der U.S. Geological Survey erklärt, dass Eis weniger dicht als flüssiges Wasser ist und deshalb schwimmt; beim Gefrieren nimmt die Dichte ab.",
+      "evidence_text_sha256": "3d9fda956e0dba9a7ba16d29bab2e47213d238d43b92611a27a75af2c9e4d670",
+      "statement": "Eis schwimmt, weil es eine geringere Dichte als flüssiges Wasser besitzt."
+    },
+    {
+      "fact_id": "I2",
+      "source_url": "https://watermanagement.yale.edu/topics/water-science/water-as-a-molecule/",
+      "evidence_text": "Yale erklärt die geringere Dichte von Eis mit einer offenen festen Struktur, die durch Wasserstoffbrücken begünstigt wird und mehr Raum pro Masse beansprucht.",
+      "evidence_text_sha256": "e9b0e724637c8a719efe0a557c02e39f934af225e95ed0bc67be6dd30b391afb",
+      "statement": "Die offene Kristallstruktur von Eis verringert seine Dichte."
+    },
+    {
+      "fact_id": "I3",
+      "source_url": "https://www.lpi.usra.edu/education/explore/ice/activities/ice_action/iceberg/",
+      "evidence_text": "Das Lunar and Planetary Institute beschreibt Dichte als Masse pro Volumen und nutzt schwimmendes Eis als direkt beobachtbares Beispiel dafür, dass Eis weniger dicht als Wasser ist.",
+      "evidence_text_sha256": "abab4ac90e239ddf9ed4a502bc85262a15c9b2b1d456abf0321fe47290c6bff4",
+      "statement": "Ein Eiswürfel zeigt den Dichteunterschied unmittelbar durch sein Schwimmverhalten."
+    }
+  ],
+  "publish_allowed": false
+}
