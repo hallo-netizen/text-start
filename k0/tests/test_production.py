@@ -22,9 +22,10 @@ def claim(fid, url, text, statement):
 
 def fixture(portal="hobbydepot"):
     slot = "a" * 64
+    categories = {"hobbydepot": "linolschnitt", "gaumenatelier": "kaffee-wissen", "neutraltest": "naturwissenschaft"}
     item = {
         "article_type": "FAQ",
-        "category": "test",
+        "category": categories.get(portal, "test"),
         "plan_slot": slot,
         "target_keyword": "Beispiel erklären",
         "title": "Wie lässt sich ein Beispiel erklären?",
