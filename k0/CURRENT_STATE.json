@@ -2,7 +2,7 @@
   "contract": "K0_CURRENT_STATE_V1",
   "role": "SOLE_K0_CURRENT_AUTHORITY",
   "scope": "CENTRAL_CAMPUS_TEXTMACHINE",
-  "status": "FOUNDATION_ROUTING_ISOLATION_PASS",
+  "status": "CENTRAL_MULTI_PORTAL_REAL_PROOF_PASS",
   "architecture": {
     "one_central_engine": true,
     "portal_specific_logic_in_profiles_only": true,
@@ -18,29 +18,69 @@
     "shared_workflows": false
   },
   "first_open_blocker": null,
-  "next_action": "DESIGN_K0_NATIVE_PRODUCTION_RULES_AND_PORTAL_PROFILE_CONTRACTS_WITHOUT_IMPORTING_EXISTING_ENGINE_CODE",
+  "next_action": "BUILD_K0_NATIVE_AUTONOMOUS_UPLOAD_TO_RESEARCH_TO_WRITE_PIPELINE_WITHOUT_IMPORTING_OR_CALLING_K9_OR_K10",
   "publish_allowed": false,
   "verified_state": {
     "branch": "k0-campus-central-20261002",
     "foundation_commit": "4bc7fdfcece81df2b302b563dde683b25308512f",
-    "isolated_selftest_run_id": 36997500231,
+    "native_production_core_commit": "ccadff0d7e56e1bb9450d260002080c99325b0f7",
+    "portal_category_guard_commit": "1c0374d5b00c36cb1362b57402c8cfcd15a4c12d",
+    "final_fixture_fix_commit": "90d1404f8b94a62527d2a9d784385319d9e78d02",
+    "latest_isolated_selftest_run_id": 37000387310,
+    "latest_isolated_selftest_result": "SUCCESS",
     "isolation_guard": "PASS",
-    "positive_routes": [
-      "alpha",
-      "beta"
+    "real_positive_runs": [
+      {
+        "portal_key": "hobbydepot",
+        "title": "Was braucht man für Linolschnitt?",
+        "run_id": 37000206164,
+        "artifact_id": 11222869632,
+        "result": "READY_FOR_OUTPUT",
+        "word_count": 609,
+        "h2_count": 5,
+        "paragraph_count": 9,
+        "real_sources": 3
+      },
+      {
+        "portal_key": "gaumenatelier",
+        "title": "Was ist der Unterschied zwischen Arabica und Robusta?",
+        "run_id": 37000210695,
+        "artifact_id": 11223171526,
+        "result": "READY_FOR_OUTPUT",
+        "word_count": 557,
+        "h2_count": 5,
+        "paragraph_count": 9,
+        "real_sources": 3
+      },
+      {
+        "portal_key": "neutraltest",
+        "title": "Warum schwimmt Eis auf Wasser?",
+        "run_id": 37000216234,
+        "artifact_id": 11223761177,
+        "result": "READY_FOR_OUTPUT",
+        "word_count": 557,
+        "h2_count": 5,
+        "paragraph_count": 9,
+        "real_sources": 3
+      }
     ],
-    "negative_tests": [
-      "UNKNOWN_PORTAL_BLOCKED",
-      "INACTIVE_PORTAL_BLOCKED",
-      "MISSING_PORTAL_KEY_BLOCKED",
-      "EXTRA_ARTICLE_FIELD_BLOCKED",
-      "PUBLISH_TRUE_BLOCKED",
-      "DISALLOWED_ARTICLE_TYPE_BLOCKED"
+    "real_negative_run": {
+      "description": "science article intentionally routed to gaumenatelier",
+      "run_id": 37000387358,
+      "expected_result": "BLOCKED",
+      "exact_reason": "CATEGORY_NOT_ALLOWED_FOR_PORTAL:naturwissenschaft",
+      "harness_result": "SUCCESS_EXPECTED_BLOCK"
+    },
+    "proven_properties": [
+      "ONE_ENGINE_MULTIPLE_PORTALS",
+      "REAL_RESEARCH_SOURCE_BINDING",
+      "REAL_TOPIC_DIVERSITY",
+      "PORTAL_CATEGORY_ISOLATION",
+      "CROSS_PORTAL_FAIL_CLOSED",
+      "NO_LIVE_PUBLISH"
     ],
-    "text_start_main_unchanged": "afd02b5468b6549bdfa0f3c407c79dc602edf657",
-    "external_legacy_heads_observed_only_for_non_mutation_proof": {
-      "k9": "2cc8167fa1e31b4ffa2ff76c9819314be4b98555",
-      "k10": "1a9258cc6d5fc151d850b2904350e4fa409e8fe5"
-    }
+    "text_start_main_modified": false,
+    "k9_or_k10_runtime_dependency": false,
+    "publish_allowed": false
   }
 }
