@@ -1,0 +1,23 @@
+name: K0 central isolated selftest
+
+on:
+  push:
+    branches: [k0-campus-central-20261002]
+    paths:
+      - 'k0/**'
+      - '.github/workflows/k0-central-selftest.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  k0-selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Verify K0 isolation
+        run: python3 -c "from k0.engine.isolation_guard import check; print(check())"
+      - name: Run K0 positive and negative tests
+        run: python3 -m unittest discover -s k0/tests -p 'test_*.py' -v

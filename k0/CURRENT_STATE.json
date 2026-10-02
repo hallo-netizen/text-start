@@ -1,0 +1,23 @@
+{
+  "contract": "K0_CURRENT_STATE_V1",
+  "role": "SOLE_K0_CURRENT_AUTHORITY",
+  "scope": "CENTRAL_CAMPUS_TEXTMACHINE",
+  "status": "FOUNDATION_CREATED_AWAITING_ISOLATED_SELFTEST",
+  "architecture": {
+    "one_central_engine": true,
+    "portal_specific_logic_in_profiles_only": true,
+    "job_identity_from_current_intake_only": true,
+    "no_live_publish": true
+  },
+  "isolation": {
+    "external_repository_reads": false,
+    "external_repository_writes": false,
+    "legacy_engine_imports": false,
+    "shared_current_authority": false,
+    "shared_artifacts": false,
+    "shared_workflows": false
+  },
+  "first_open_blocker": null,
+  "next_action": "RUN_K0_ISOLATED_SELFTEST",
+  "publish_allowed": false
+}

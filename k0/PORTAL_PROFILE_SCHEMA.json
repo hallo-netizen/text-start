@@ -1,0 +1,22 @@
+{
+  "contract": "K0_PORTAL_PROFILE_SCHEMA_V1",
+  "required_fields": [
+    "contract",
+    "portal_key",
+    "display_name",
+    "active",
+    "own_domain",
+    "metadata_source",
+    "internal_link_source",
+    "output_adapter",
+    "allowed_article_types",
+    "portal_rules",
+    "publish_allowed"
+  ],
+  "invariants": {
+    "contract": "K0_PORTAL_PROFILE_V1",
+    "portal_key_pattern": "^[a-z0-9][a-z0-9_-]{1,63}$",
+    "publish_allowed": false,
+    "output_adapter_must_be_local_profile_binding": true
+  }
+}

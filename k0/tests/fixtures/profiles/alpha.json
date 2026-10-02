@@ -1,0 +1,18 @@
+{
+  "contract": "K0_PORTAL_PROFILE_V1",
+  "portal_key": "alpha",
+  "display_name": "Alpha Testportal",
+  "active": true,
+  "own_domain": "alpha.invalid",
+  "metadata_source": "LOCAL_TEST_FIXTURE",
+  "internal_link_source": "LOCAL_TEST_FIXTURE",
+  "output_adapter": "LOCAL_TEST_OUTPUT",
+  "allowed_article_types": [
+    "Beratung",
+    "FAQ",
+    "Pflege",
+    "Vergleich"
+  ],
+  "portal_rules": [],
+  "publish_allowed": false
+}

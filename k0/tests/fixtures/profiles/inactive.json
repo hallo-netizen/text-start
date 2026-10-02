@@ -1,0 +1,15 @@
+{
+  "contract": "K0_PORTAL_PROFILE_V1",
+  "portal_key": "inactive",
+  "display_name": "Inactive Testportal",
+  "active": false,
+  "own_domain": "inactive.invalid",
+  "metadata_source": "LOCAL_TEST_FIXTURE",
+  "internal_link_source": "LOCAL_TEST_FIXTURE",
+  "output_adapter": "LOCAL_TEST_OUTPUT",
+  "allowed_article_types": [
+    "Beratung"
+  ],
+  "portal_rules": [],
+  "publish_allowed": false
+}
