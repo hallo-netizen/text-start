@@ -19,5 +19,10 @@
       "Hobby Depot"
     ]
   },
-  "publish_allowed": false
+  "publish_allowed": false,
+  "allowed_categories": [
+    "kaffee-wissen",
+    "kochen",
+    "zutaten"
+  ]
 }

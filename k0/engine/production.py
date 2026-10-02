@@ -96,6 +96,12 @@ def validate_article(article: dict, item: dict, portal_key: str, profile: dict, 
     if article.get("publish_allowed") is not False:
         raise Blocked("ARTICLE_PUBLISH_BOUNDARY_INVALID")
 
+    allowed_categories = profile.get("allowed_categories")
+    if not isinstance(allowed_categories, list) or not allowed_categories:
+        raise Blocked("PORTAL_ALLOWED_CATEGORIES_INVALID")
+    if item["category"] not in allowed_categories:
+        raise Blocked("CATEGORY_NOT_ALLOWED_FOR_PORTAL:" + item["category"])
+
     binding = article.get("planning_binding")
     if not isinstance(binding, dict) or set(binding) != set(FIVE_FIELDS):
         raise Blocked("ARTICLE_PLANNING_BINDING_INVALID")

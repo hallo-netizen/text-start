@@ -96,5 +96,13 @@ class ProductionTests(unittest.TestCase):
             self._run("hobbydepot", mutate)
 
 
+    def test_category_from_other_portal_blocks(self):
+        def mutate(i, r, a):
+            i["item"]["category"] = "naturwissenschaft"
+            a["planning_binding"]["category"] = "naturwissenschaft"
+        with self.assertRaisesRegex(Blocked, "CATEGORY_NOT_ALLOWED_FOR_PORTAL"):
+            self._run("gaumenatelier", mutate)
+
+
 if __name__ == "__main__":
     unittest.main()

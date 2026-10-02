@@ -18,5 +18,8 @@
       "Gaumen Atelier"
     ]
   },
-  "publish_allowed": false
+  "publish_allowed": false,
+  "allowed_categories": [
+    "naturwissenschaft"
+  ]
 }

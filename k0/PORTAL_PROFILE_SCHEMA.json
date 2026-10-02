@@ -11,7 +11,8 @@
     "output_adapter",
     "allowed_article_types",
     "portal_rules",
-    "publish_allowed"
+    "publish_allowed",
+    "allowed_categories"
   ],
   "invariants": {
     "contract": "K0_PORTAL_PROFILE_V1",
