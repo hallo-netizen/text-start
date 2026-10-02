@@ -41,7 +41,9 @@ def check() -> dict:
     for path in ENGINE_ROOT.rglob("*.py"):
         text = path.read_text(encoding="utf-8")
         rel = str(path.relative_to(K0_ROOT))
-        for token in FORBIDDEN_RUNTIME_TOKENS:
+        # The guard itself contains the deny-list by definition; scan every other runtime module.
+        scan_runtime_tokens = path.name != "isolation_guard.py"
+        for token in FORBIDDEN_RUNTIME_TOKENS if scan_runtime_tokens else ():
             if token in text:
                 findings.append("FORBIDDEN_RUNTIME_REFERENCE:" + rel + ":" + token)
 
