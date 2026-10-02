@@ -1,0 +1,43 @@
+{
+  "contract": "K0_RESEARCH_V1",
+  "portal_key": "gaumenatelier",
+  "plan_slot": "2222222222222222222222222222222222222222222222222222222222222222",
+  "sources": [
+    {
+      "title": "Kew – Arabica coffee",
+      "url": "https://www.kew.org/plants/arabica-coffee"
+    },
+    {
+      "title": "Kew – Building a climate resilient coffee economy for Ethiopia",
+      "url": "https://www.kew.org/read-and-watch/building-climate-resilient-economy-ethiopia"
+    },
+    {
+      "title": "International Coffee Organization – Sustainability / Quality",
+      "url": "https://ico.org/de/market-development-toolkit/page/index/8/quality/98"
+    }
+  ],
+  "claims": [
+    {
+      "fact_id": "C1",
+      "source_url": "https://www.kew.org/plants/arabica-coffee",
+      "evidence_text": "Arabica ist Coffea arabica; Kew beschreibt Arabica und Robusta als die beiden kommerziell dominierenden Kaffeearten und nennt Arabica als die verbreitetere Art.",
+      "evidence_text_sha256": "86e69878389b9ed1f52d8e783f9c6db23943bd8bfcb2a66a955e1c722d382a6b",
+      "statement": "Arabica und Robusta sind unterschiedliche Kaffeearten."
+    },
+    {
+      "fact_id": "C2",
+      "source_url": "https://www.kew.org/read-and-watch/building-climate-resilient-economy-ethiopia",
+      "evidence_text": "Kew beschreibt Arabica als Kaffee aus kühleren tropischen Waldregionen und Robusta als Coffea canephora aus wärmeren Tieflandregionen; beide unterscheiden sich auch in Robustheit und typischem Einsatz.",
+      "evidence_text_sha256": "ca7233c7a2a844ac6fa266e3a8de48ebf721557a54e5bc1ae86f00dd73d9a2cb",
+      "statement": "Arabica und Robusta unterscheiden sich in Herkunft, Anbaubedingungen und typischer Nutzung."
+    },
+    {
+      "fact_id": "C3",
+      "source_url": "https://ico.org/de/market-development-toolkit/page/index/8/quality/98",
+      "evidence_text": "Die Internationale Kaffeeorganisation unterscheidet die Qualitätsbewertung von Arabica und Robusta; beide werden in unterschiedlichen Qualitätsstufen gehandelt und sensorisch bewertet.",
+      "evidence_text_sha256": "2314ae8c2e611eccf8bfbe3c37ddb431ef19378076d769d39e6fe22fef18f39f",
+      "statement": "Die Artbezeichnung allein ist kein vollständiges Qualitätsurteil."
+    }
+  ],
+  "publish_allowed": false
+}

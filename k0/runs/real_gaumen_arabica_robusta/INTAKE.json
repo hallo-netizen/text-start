@@ -1,0 +1,12 @@
+{
+  "contract": "K0_CENTRAL_INTAKE_V1",
+  "portal_key": "gaumenatelier",
+  "item": {
+    "article_type": "FAQ",
+    "category": "kaffee-wissen",
+    "plan_slot": "2222222222222222222222222222222222222222222222222222222222222222",
+    "target_keyword": "Was ist der Unterschied zwischen Arabica und Robusta",
+    "title": "Was ist der Unterschied zwischen Arabica und Robusta?"
+  },
+  "publish_allowed": false
+}
