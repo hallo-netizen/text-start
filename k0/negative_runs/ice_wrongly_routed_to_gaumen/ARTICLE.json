@@ -1,0 +1,13 @@
+{
+  "contract": "K0_ARTICLE_V1",
+  "portal_key": "gaumenatelier",
+  "planning_binding": {
+    "article_type": "FAQ",
+    "category": "naturwissenschaft",
+    "plan_slot": "4444444444444444444444444444444444444444444444444444444444444444",
+    "target_keyword": "Warum schwimmt Eis auf Wasser",
+    "title": "Warum schwimmt Eis auf Wasser?"
+  },
+  "html": "<article><section data-block=\"intro\"><p data-fact-ids=\"N1\">Eis schwimmt auf Wasser, weil es eine geringere Dichte als flüssiges Wasser besitzt und dadurch vom dichteren Wasser getragen wird. Dieser Unterschied entsteht beim Gefrieren durch die besondere Anordnung der Wassermoleküle.</p></section><section data-block=\"a\"><h2>Dichte entscheidet über das Schwimmen</h2><p data-fact-ids=\"N1 N3\">Dichte beschreibt, wie viel Masse in einem bestimmten Volumen steckt. Eis benötigt für dieselbe Masse mehr Raum als flüssiges Wasser und ist deshalb weniger dicht. Das führt dazu, dass ein Eiswürfel nicht vollständig untergeht.</p><p data-fact-ids=\"N1\">Der Auftrieb des verdrängten Wassers trägt den Eiswürfel. Sobald genügend Wasser verdrängt ist, gleichen sich Gewicht und Auftrieb aus. Ein Teil des Eises bleibt sichtbar über der Oberfläche.</p></section><section data-block=\"b\"><h2>Beim Gefrieren entsteht eine offene Struktur</h2><p data-fact-ids=\"N2\">Wassermoleküle ordnen sich im festen Zustand regelmäßiger an. Wasserstoffbrücken begünstigen eine offene Kristallstruktur, in der die Moleküle weiter auseinander liegen als im flüssigen Zustand.</p><p data-fact-ids=\"N2\">Die Masse des Wassers bleibt dabei erhalten, während das Volumen zunimmt. Genau dadurch sinkt die Dichte. Dieses Verhalten unterscheidet Wasser von vielen anderen Stoffen.</p></section><section data-block=\"c\"><h2>Das lässt sich direkt beobachten</h2><p data-fact-ids=\"N1 N3\">Ein Eiswürfel im Wasserglas zeigt den Unterschied sofort. Er taucht nur so weit ein, bis das verdrängte Wasser genügend Auftrieb liefert. Das sichtbare Schwimmen ist deshalb ein einfaches Experiment zur Dichte.</p><p data-fact-ids=\"N1\">Dasselbe Prinzip gilt auch für größere Eismassen. Die Form verändert das Verhältnis von eingetauchtem und sichtbarem Teil, nicht aber den grundlegenden Grund für das Schwimmen.</p></section><section data-block=\"conclusion\"><h2>Fazit</h2><p data-fact-ids=\"N1 N2 N3\">Eis schwimmt, weil seine offene Kristallstruktur zu einer geringeren Dichte als bei flüssigem Wasser führt. Entscheidend ist das Verhältnis von Masse und Volumen. Der Eiswürfel im Glas macht diese ungewöhnliche Eigenschaft von Wasser unmittelbar sichtbar und zeigt zugleich, wie Dichte und Auftrieb zusammenwirken.</p></section></article>",
+  "publish_allowed": false
+}

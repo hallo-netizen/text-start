@@ -1,0 +1,12 @@
+{
+  "contract": "K0_CENTRAL_INTAKE_V1",
+  "portal_key": "gaumenatelier",
+  "item": {
+    "article_type": "FAQ",
+    "category": "naturwissenschaft",
+    "plan_slot": "4444444444444444444444444444444444444444444444444444444444444444",
+    "target_keyword": "Warum schwimmt Eis auf Wasser",
+    "title": "Warum schwimmt Eis auf Wasser?"
+  },
+  "publish_allowed": false
+}
