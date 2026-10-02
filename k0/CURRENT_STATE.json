@@ -2,7 +2,7 @@
   "contract": "K0_CURRENT_STATE_V1",
   "role": "SOLE_K0_CURRENT_AUTHORITY",
   "scope": "CENTRAL_CAMPUS_TEXTMACHINE",
-  "status": "FOUNDATION_CREATED_AWAITING_ISOLATED_SELFTEST",
+  "status": "FOUNDATION_ROUTING_ISOLATION_PASS",
   "architecture": {
     "one_central_engine": true,
     "portal_specific_logic_in_profiles_only": true,
@@ -18,6 +18,29 @@
     "shared_workflows": false
   },
   "first_open_blocker": null,
-  "next_action": "RUN_K0_ISOLATED_SELFTEST",
-  "publish_allowed": false
+  "next_action": "DESIGN_K0_NATIVE_PRODUCTION_RULES_AND_PORTAL_PROFILE_CONTRACTS_WITHOUT_IMPORTING_EXISTING_ENGINE_CODE",
+  "publish_allowed": false,
+  "verified_state": {
+    "branch": "k0-campus-central-20261002",
+    "foundation_commit": "4bc7fdfcece81df2b302b563dde683b25308512f",
+    "isolated_selftest_run_id": 36997500231,
+    "isolation_guard": "PASS",
+    "positive_routes": [
+      "alpha",
+      "beta"
+    ],
+    "negative_tests": [
+      "UNKNOWN_PORTAL_BLOCKED",
+      "INACTIVE_PORTAL_BLOCKED",
+      "MISSING_PORTAL_KEY_BLOCKED",
+      "EXTRA_ARTICLE_FIELD_BLOCKED",
+      "PUBLISH_TRUE_BLOCKED",
+      "DISALLOWED_ARTICLE_TYPE_BLOCKED"
+    ],
+    "text_start_main_unchanged": "afd02b5468b6549bdfa0f3c407c79dc602edf657",
+    "external_legacy_heads_observed_only_for_non_mutation_proof": {
+      "k9": "2cc8167fa1e31b4ffa2ff76c9819314be4b98555",
+      "k10": "1a9258cc6d5fc151d850b2904350e4fa409e8fe5"
+    }
+  }
 }
