@@ -17,21 +17,21 @@
       "fact_id": "N1",
       "source_url": "https://www.usgs.gov/water-science-school/science/water-density",
       "evidence_text": "Der U.S. Geological Survey erklärt, dass Eis weniger dicht als flüssiges Wasser ist und deshalb schwimmt.",
-      "evidence_text_sha256": "e4d2429517450520cd10dfb10cacb7db370c86db3f781dfb9f4efb902bab3f46",
+      "evidence_text_sha256": "bb86f2e12a48ca4a1501e7d2d467756f42a2d945ed548229ab200caf33711b73",
       "statement": "Eis ist weniger dicht als flüssiges Wasser."
     },
     {
       "fact_id": "N2",
       "source_url": "https://watermanagement.yale.edu/topics/water-science/water-as-a-molecule/",
       "evidence_text": "Yale erklärt die geringere Dichte von Eis mit einer offenen festen Struktur, die durch Wasserstoffbrücken entsteht.",
-      "evidence_text_sha256": "9dcdd0c4613853b5c5fd4ecad40ef29a782aebf76b2199e7bfeeb7d23279e5fa",
+      "evidence_text_sha256": "3b637dc35637997b7210f9852ef10cda9f998bc27031168f86a7989164e16111",
       "statement": "Die feste Struktur von Eis beansprucht mehr Raum."
     },
     {
       "fact_id": "N3",
       "source_url": "https://www.usgs.gov/water-science-school/science/water-density",
       "evidence_text": "Dichte beschreibt die Masse eines Stoffes bezogen auf sein Volumen.",
-      "evidence_text_sha256": "98a0c280f860b63fbb6b6a9cb1a5d4d8c26ff3b5d8a9f9071a18b42124647332",
+      "evidence_text_sha256": "b043ac58ed595352c354753506e8864265c0242cf2048c13e47a44d350f195d0",
       "statement": "Dichte ist Masse pro Volumen."
     }
   ],
