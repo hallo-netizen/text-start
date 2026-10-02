@@ -1,0 +1,54 @@
+name: K0 real isolated production
+
+on:
+  push:
+    branches: [k0-campus-central-20261002]
+    paths:
+      - 'k0/runs/**'
+
+permissions:
+  contents: read
+
+jobs:
+  k0-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 2
+
+      - name: Verify K0 isolation
+        run: python3 -c "from k0.engine.isolation_guard import check; print(check())"
+
+      - name: Resolve exactly one K0 real run
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t dirs < <(git diff --name-only HEAD^ HEAD -- 'k0/runs/**' | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}' | sort -u)
+          test "${#dirs[@]}" -eq 1 || { echo "K0_EXACTLY_ONE_REAL_RUN_REQUIRED:${#dirs[@]}"; exit 2; }
+          rd="${dirs[0]}"
+          for f in INTAKE.json RESEARCH.json ARTICLE.json; do test -f "$rd/$f" || { echo "K0_FILE_MISSING:$f"; exit 2; }; done
+          echo "RUN_DIR=$rd" >> "$GITHUB_ENV"
+
+      - name: Run central K0 production
+        run: |
+          mkdir -p /tmp/k0-output
+          python3 -m k0.engine.production "$RUN_DIR" k0/portals /tmp/k0-output
+
+      - name: Verify terminal result
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('/tmp/k0-output/FINAL_ARTICLE.json',encoding='utf-8'))
+          assert r['status']=='READY_FOR_OUTPUT',r
+          assert r['publish_allowed'] is False
+          print('K0_REAL_PRODUCTION_PASS:'+r['portal_key']+':'+r['title'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: k0-real-${{ github.run_id }}
+          path: /tmp/k0-output
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,22 @@
+{
+  "contract": "K0_PORTAL_PROFILE_V1",
+  "portal_key": "neutraltest",
+  "display_name": "Neutraler Fremdthemen-Test",
+  "active": true,
+  "own_domain": "neutral.invalid",
+  "metadata_source": "K0_CURRENT_INTAKE",
+  "internal_link_source": "K0_PROFILE_LOCAL",
+  "output_adapter": "K0_JSON_V1",
+  "allowed_article_types": [
+    "FAQ",
+    "Beratung"
+  ],
+  "portal_rules": {
+    "forbidden_cross_portal_terms": [
+      "Pferdeatelier",
+      "Hobby Depot",
+      "Gaumen Atelier"
+    ]
+  },
+  "publish_allowed": false
+}
