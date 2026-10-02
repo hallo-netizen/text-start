@@ -19,6 +19,7 @@ ALLOWED_IMPORT_ROOTS = {
     "__future__",
     "ast",
     "hashlib",
+    "html",
     "json",
     "pathlib",
     "re",
