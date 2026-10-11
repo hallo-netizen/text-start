@@ -1,6 +1,8 @@
 from __future__ import annotations
 import copy
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -64,6 +66,52 @@ class StartDoorTests(unittest.TestCase):
         self.assertNotIn("/dispatches", door)
         self.assertNotIn("text-start-pferdeatelier.yml", door)
         self.assertNotIn("concept_agent/", door)
+
+    def _run_actual_issue_entry(self, author: str, title: str, issue_number: str = "123") -> subprocess.CompletedProcess:
+        """Run the actual checked-in Issue resolver with simulated GitHub event values."""
+        door = (start.ROOT / ".github/workflows/text-start-door.yml").read_text(encoding="utf-8")
+        section = door.split("      - name: Resolve request\\n", 1)[1].split("      - name: Verify pinned K0 entry", 1)[0]
+        script_lines = section.split("        run: |\\n", 1)[1].splitlines()
+        script = "\\n".join(line[10:] for line in script_lines if line.startswith("          ")) + "\\n"
+        fixed = 'issue_number="${{ github.event.issue.number }}"'
+        self.assertEqual(script.count(fixed), 1)
+        script = script.replace(fixed, 'issue_number="' + issue_number + '"')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "projects").mkdir()
+            (root / "projects/pferdeatelier.json").write_bytes((start.PROJECTS / "pferdeatelier.json").read_bytes())
+            (root / "START_POLICY.json").write_bytes(start.POLICY.read_bytes())
+            (root / "start.py").write_bytes((start.ROOT / "start.py").read_bytes())
+            output = root / "github-output"
+            env = dict(os.environ, ISSUE_TITLE=title, ISSUE_AUTHOR_ASSOCIATION=author, GITHUB_OUTPUT=str(output))
+            result = subprocess.run(["bash", "-c", script], cwd=root, env=env, capture_output=True, text=True, timeout=15)
+            if result.returncode == 0:
+                self.assertTrue((root / "START_AUTHORIZATION.json").exists())
+                doc = json.loads((root / "START_AUTHORIZATION.json").read_text(encoding="utf-8"))
+                self.assertEqual(doc["status"], "START_AUTHORIZED")
+                self.assertIn("issue_number=" + issue_number, output.read_text(encoding="utf-8"))
+            return result
+
+    def test_issue_entry_positive_real_shell(self):
+        proc = self._run_actual_issue_entry("OWNER", "START:pferdeatelier")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+    def test_issue_entry_rejects_untrusted_author_real_shell(self):
+        for author in ("NONE", "FIRST_TIME_CONTRIBUTOR", "CONTRIBUTOR", ""):
+            proc = self._run_actual_issue_entry(author, "START:pferdeatelier")
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("START_AUTHOR_NOT_AUTHORIZED", proc.stderr)
+
+    def test_issue_entry_rejects_other_title_real_shell(self):
+        for title in ("START:other", "K0:start", "START:pferdeatelier extra", ""):
+            proc = self._run_actual_issue_entry("OWNER", title)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("START_TITLE_FORBIDDEN", proc.stderr)
+
+    def test_issue_entry_rejects_missing_issue_number(self):
+        proc = self._run_actual_issue_entry("OWNER", "START:pferdeatelier", "")
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("START_ISSUE_NUMBER_REQUIRED", proc.stderr)
 
     def test_publish_or_quality_authority_blocked(self):
         for key, value in [
