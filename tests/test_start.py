@@ -70,9 +70,9 @@ class StartDoorTests(unittest.TestCase):
     def _run_actual_issue_entry(self, author: str, title: str, issue_number: str = "123") -> subprocess.CompletedProcess:
         """Run the actual checked-in Issue resolver with simulated GitHub event values."""
         door = (start.ROOT / ".github/workflows/text-start-door.yml").read_text(encoding="utf-8")
-        section = door.split("      - name: Resolve request\\n", 1)[1].split("      - name: Verify pinned K0 entry", 1)[0]
-        script_lines = section.split("        run: |\\n", 1)[1].splitlines()
-        script = "\\n".join(line[10:] for line in script_lines if line.startswith("          ")) + "\\n"
+        section = door.split("      - name: Resolve request\n", 1)[1].split("      - name: Verify pinned K0 entry", 1)[0]
+        script_lines = section.split("        run: |\n", 1)[1].splitlines()
+        script = "\n".join(line[10:] for line in script_lines if line.startswith("          ")) + "\n"
         fixed = 'issue_number="${{ github.event.issue.number }}"'
         self.assertEqual(script.count(fixed), 1)
         script = script.replace(fixed, 'issue_number="' + issue_number + '"')
