@@ -49,6 +49,15 @@ class StartDoorTests(unittest.TestCase):
     def test_old_concept_agent_route_blocked(self):
         self._tampered("canonical_start_command", "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json", "PFERDEATELIER_COMMAND_DRIFT")
 
+    def test_start_door_no_alternate_workflow_dispatch(self):
+        door = (start.ROOT / ".github/workflows/text-start-door.yml").read_text(encoding="utf-8")
+        self.assertIn("K0_ENTRY_VERIFIED", door)
+        self.assertIn("ISSUE_AUTHOR_ASSOCIATION", door)
+        self.assertIn("OWNER|MEMBER|COLLABORATOR", door)
+        self.assertNotIn("/dispatches", door)
+        self.assertNotIn("text-start-pferdeatelier.yml", door)
+        self.assertNotIn("concept_agent/", door)
+
     def test_publish_or_quality_authority_blocked(self):
         for key, value in [
             ("publish_allowed", True),
