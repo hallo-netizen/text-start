@@ -100,18 +100,18 @@ class StartDoorTests(unittest.TestCase):
         for author in ("NONE", "FIRST_TIME_CONTRIBUTOR", "CONTRIBUTOR", ""):
             proc = self._run_actual_issue_entry(author, "START:pferdeatelier")
             self.assertNotEqual(proc.returncode, 0)
-            self.assertIn("START_AUTHOR_NOT_AUTHORIZED", proc.stderr)
+            self.assertIn("START_AUTHOR_NOT_AUTHORIZED", proc.stdout + proc.stderr)
 
     def test_issue_entry_rejects_other_title_real_shell(self):
         for title in ("START:other", "K0:start", "START:pferdeatelier extra", ""):
             proc = self._run_actual_issue_entry("OWNER", title)
             self.assertNotEqual(proc.returncode, 0)
-            self.assertIn("START_TITLE_FORBIDDEN", proc.stderr)
+            self.assertIn("START_TITLE_FORBIDDEN", proc.stdout + proc.stderr)
 
     def test_issue_entry_rejects_missing_issue_number(self):
         proc = self._run_actual_issue_entry("OWNER", "START:pferdeatelier", "")
         self.assertNotEqual(proc.returncode, 0)
-        self.assertIn("START_ISSUE_NUMBER_REQUIRED", proc.stderr)
+        self.assertIn("START_ISSUE_NUMBER_REQUIRED", proc.stdout + proc.stderr)
 
     def test_publish_or_quality_authority_blocked(self):
         for key, value in [
