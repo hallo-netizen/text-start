@@ -48,11 +48,14 @@ jobs:
           echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
       - name: Verify pinned K0 entry on production repository
+        env:
+          START_ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          START_RUN_ID: ${{ github.run_id }}
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import base64, json, urllib.request
+          import base64, json, os, urllib.request
           repo='hallo-netizen/affiliate-pferdeportal'
           ref='konzept0-portal-neutral-20261002'
           workflow='.github/workflows/k0-authoring-context.yml'
@@ -84,8 +87,12 @@ jobs:
                   or 'branches: [konzept0-portal-neutral-20261002]' not in wf
                   or "real_runs/k0/**/AUTHORING_CONTEXT.json" not in wf):
               raise SystemExit('K0_EXISTING_TRIGGER_DRIFT')
+          issue_number=os.environ.get('START_ISSUE_NUMBER','')
+          run_id=os.environ.get('START_RUN_ID','')
+          if not (issue_number.isdecimal() and int(issue_number)>0 and run_id.isdecimal() and int(run_id)>0):
+              raise SystemExit('START_RECEIPT_ID_MISSING')
           with open('K0_ENTRY_VERIFIED.json','w',encoding='utf-8') as output:
-              json.dump({'status':'K0_ENTRY_VERIFIED','target_repository':repo,'target_ref':ref,'start_command':'K0:start','target_workflow':workflow,'requires_current_upload':True,'publish_allowed':False}, output,ensure_ascii=False,sort_keys=True)
+              json.dump({'status':'K0_ENTRY_VERIFIED','source_repository':'hallo-netizen/text-start','source_issue_number':int(issue_number),'source_run_id':int(run_id),'target_repository':repo,'target_ref':ref,'start_command':'K0:start','target_workflow':workflow,'requires_current_upload':True,'publish_allowed':False}, output,ensure_ascii=False,sort_keys=True)
           print('K0_ENTRY_VERIFIED; existing K0 uses an unchanged file trigger')
           PY
 
