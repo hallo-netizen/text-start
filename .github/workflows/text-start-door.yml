@@ -3,7 +3,6 @@ name: text-start door
 on:
   issues:
     types: [opened]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,6 +10,7 @@ permissions:
 
 jobs:
   door:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout fixed start door
@@ -22,26 +22,21 @@ jobs:
       - name: Resolve request
         id: request
         env:
-          EVENT_NAME: ${{ github.event_name }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_AUTHOR_ASSOCIATION: ${{ github.event.issue.author_association }}
         shell: bash
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            project="pferdeatelier"
-            issue_number=""
-          else
-            case "$ISSUE_AUTHOR_ASSOCIATION" in
-              OWNER|MEMBER|COLLABORATOR) ;;
-              *) echo "START_AUTHOR_NOT_AUTHORIZED"; exit 2 ;;
-            esac
-            case "$ISSUE_TITLE" in
-              "START:pferdeatelier") project="pferdeatelier" ;;
-              *) echo "Unsupported start request"; exit 2 ;;
-            esac
-            issue_number="${{ github.event.issue.number }}"
-          fi
+          case "$ISSUE_AUTHOR_ASSOCIATION" in
+            OWNER|MEMBER|COLLABORATOR) ;;
+            *) echo "START_AUTHOR_NOT_AUTHORIZED"; exit 2 ;;
+          esac
+          case "$ISSUE_TITLE" in
+            "START:pferdeatelier") project="pferdeatelier" ;;
+            *) echo "START_TITLE_FORBIDDEN"; exit 2 ;;
+          esac
+          issue_number="${{ github.event.issue.number }}"
+          test -n "$issue_number" || { echo "START_ISSUE_NUMBER_REQUIRED"; exit 2; }
           python3 start.py start "$project" | tee START_AUTHORIZATION.json
           python3 - <<'PY'
           import json
@@ -91,7 +86,7 @@ jobs:
               raise SystemExit('K0_EXISTING_TRIGGER_DRIFT')
           with open('K0_ENTRY_VERIFIED.json','w',encoding='utf-8') as output:
               json.dump({'status':'K0_ENTRY_VERIFIED','target_repository':repo,'target_ref':ref,'start_command':'K0:start','target_workflow':workflow,'requires_current_upload':True,'publish_allowed':False}, output,ensure_ascii=False,sort_keys=True)
-          print('K0_ENTRY_VERIFIED; existing K0 is file-triggered, not workflow_dispatch')
+          print('K0_ENTRY_VERIFIED; existing K0 uses an unchanged file trigger')
           PY
 
       - name: Upload verified start authorization
@@ -105,7 +100,6 @@ jobs:
           retention-days: 30
 
       - name: Mark issue K0 entry verified
-        if: github.event_name == 'issues'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
