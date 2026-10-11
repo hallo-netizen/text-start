@@ -1,0 +1,33 @@
+name: Temporary K0 text-start branch regression
+on:
+  push:
+    branches: [k0-start-door-20261011]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Positive and negative start unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: K0 route and unchanged workflow check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 start.py start pferdeatelier > /tmp/k0-start.json
+          python3 - <<'PY'
+          import json, pathlib
+          doc=json.load(open('/tmp/k0-start.json'))
+          assert doc['status']=='START_AUTHORIZED'
+          assert doc['target_ref']=='konzept0-portal-neutral-20261002'
+          assert doc['target_workflow']=='.github/workflows/k0-authoring-context.yml'
+          assert doc['canonical_start_command']=='K0:start'
+          assert doc['publish_allowed'] is False if 'publish_allowed' in doc else True
+          yaml=pathlib.Path('.github/workflows/text-start-door.yml').read_text()
+          assert 'concept_agent/' not in yaml
+          assert 'text-start-pferdeatelier.yml' not in yaml
+          assert '/dispatches' not in yaml
+          assert 'K0_ENTRY_VERIFIED' in yaml
+          print('K0_START_ROUTE_POSITIVE_NEGATIVE_PASS')
+          PY
