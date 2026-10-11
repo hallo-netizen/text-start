@@ -31,3 +31,19 @@ jobs:
           assert 'K0_ENTRY_VERIFIED' in yaml
           print('K0_START_ROUTE_POSITIVE_NEGATIVE_PASS')
           PY
+
+      - name: Execute exact K0 current verification against live GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib
+          door=pathlib.Path('.github/workflows/text-start-door.yml').read_text(encoding='utf-8')
+          section=door.split('      - name: Verify pinned K0 entry on production repository\n',1)[1].split('      - name: Upload verified start authorization',1)[0]
+          script=section.split("          python3 - <<'PY'\n",1)[1].split('          PY\n',1)[0]
+          script='\n'.join(line[10:] for line in script.splitlines())+'\n'
+          compile(script, 'live-k0-gate.py', 'exec')
+          exec(script, {'__name__':'__main__'})
+          assert pathlib.Path('K0_ENTRY_VERIFIED.json').exists()
+          print('LIVE_K0_ENTRY_GATE_PASS')
+          PY
