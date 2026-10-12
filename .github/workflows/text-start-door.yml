@@ -3,7 +3,6 @@ name: text-start door
 on:
   issues:
     types: [opened]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,9 +10,8 @@ permissions:
 
 jobs:
   door:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
     runs-on: ubuntu-latest
-    env:
-      TARGET_TOKEN: ${{ secrets.TEXT_START_TARGET_TOKEN }}
     steps:
       - name: Checkout fixed start door
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -24,21 +22,21 @@ jobs:
       - name: Resolve request
         id: request
         env:
-          EVENT_NAME: ${{ github.event_name }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_AUTHOR_ASSOCIATION: ${{ github.event.issue.author_association }}
         shell: bash
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            project="pferdeatelier"
-            issue_number=""
-          else
-            case "$ISSUE_TITLE" in
-              "START:pferdeatelier") project="pferdeatelier" ;;
-              *) echo "Unsupported start request"; exit 2 ;;
-            esac
-            issue_number="${{ github.event.issue.number }}"
-          fi
+          case "$ISSUE_AUTHOR_ASSOCIATION" in
+            OWNER|MEMBER|COLLABORATOR) ;;
+            *) echo "START_AUTHOR_NOT_AUTHORIZED"; exit 2 ;;
+          esac
+          case "$ISSUE_TITLE" in
+            "START:pferdeatelier") project="pferdeatelier" ;;
+            *) echo "START_TITLE_FORBIDDEN"; exit 2 ;;
+          esac
+          issue_number="${{ github.event.issue.number }}"
+          test -n "$issue_number" || { echo "START_ISSUE_NUMBER_REQUIRED"; exit 2; }
           python3 start.py start "$project" | tee START_AUTHORIZATION.json
           python3 - <<'PY'
           import json
@@ -49,78 +47,72 @@ jobs:
           echo "project=$project" >> "$GITHUB_OUTPUT"
           echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
-      - name: Upload start authorization
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: start-authorization-${{ steps.request.outputs.project }}
-          path: START_AUTHORIZATION.json
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Mark issue authorized
-        if: github.event_name == 'issues'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'START_AUTHORIZED: ' + '${{ steps.request.outputs.project }}' + '\nRUN_ID: ' + context.runId
-            })
-
-      - name: Mark target dispatch requested
-        if: github.event_name == 'issues' && env.TARGET_TOKEN != ''
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'TARGET_DISPATCH_REQUESTED: pferdeatelier\nSOURCE_RUN_ID: ' + context.runId
-            })
-
-      - name: Dispatch fixed Pferdeatelier receiver
-        if: github.event_name == 'issues' && env.TARGET_TOKEN != ''
+      - name: Verify pinned K0 entry on production repository
         env:
-          GH_TOKEN: ${{ env.TARGET_TOKEN }}
-          SOURCE_RUN_ID: ${{ github.run_id }}
-          SOURCE_ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          START_ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          START_RUN_ID: ${{ github.run_id }}
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json
-          a=json.load(open("START_AUTHORIZATION.json", encoding="utf-8"))
-          if a["target_repository"] != "hallo-netizen/affiliate-pferdeportal":
-              raise SystemExit("TARGET_REPOSITORY_DRIFT")
-          if a["target_ref"] != "main":
-              raise SystemExit("TARGET_REF_DRIFT")
-          if a["target_workflow"] != "text-start-pferdeatelier.yml":
-              raise SystemExit("TARGET_WORKFLOW_DRIFT")
-          if a["canonical_start_command"] != "python3 concept_agent/intake_bridge.py prepare concept_agent/current/PSERC_METADATA_SNAPSHOT.json CONCEPT_AGENT_INTAKE.json":
-              raise SystemExit("TARGET_COMMAND_DRIFT")
+          import base64, json, os, urllib.request
+          repo='hallo-netizen/affiliate-pferdeportal'
+          ref='konzept0-portal-neutral-20261002'
+          workflow='.github/workflows/k0-authoring-context.yml'
+          def get(path):
+              url=f'https://api.github.com/repos/{repo}/contents/{path}?ref={ref}'
+              request=urllib.request.Request(url,headers={'Accept':'application/vnd.github+json','User-Agent':'text-start-k0-entry-verifier'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  doc=json.load(response)
+              if doc.get('type')!='file' or doc.get('encoding')!='base64':
+                  raise SystemExit('K0_EXPECTED_REPOSITORY_FILE_MISSING:'+path)
+              return base64.b64decode(doc['content'])
+          state=json.loads(get('K0_CURRENT_STATE.json'))
+          if state.get('role')!='SOLE_CURRENT_AUTHORITY' or state.get('branch')!=ref:
+              raise SystemExit('K0_CURRENT_AUTHORITY_DRIFT')
+          binding=state.get('work_binding') or {}
+          mechanism=binding.get('start_mechanism') or {}
+          if (binding.get('start_command')!='K0:start'
+                  or binding.get('start_ref')!='K0_START_HERE.md'
+                  or mechanism.get('type')!='EXISTING_GITHUB_FILE_TRIGGER_FOR_CURRENT_UPLOAD'
+                  or mechanism.get('trigger_workflow')!=workflow
+                  or mechanism.get('writer_core_mode')!='UNCHANGED_SINGLE_ITEM'
+                  or state.get('publish_allowed') is not False):
+              raise SystemExit('K0_START_CONTRACT_DRIFT')
+          entry=get('K0_START_HERE.md').decode('utf-8')
+          if '`K0:start`' not in entry:
+              raise SystemExit('K0_START_ENTRY_MISSING')
+          wf=get(workflow).decode('utf-8')
+          if ('  push:' not in wf
+                  or 'branches: [konzept0-portal-neutral-20261002]' not in wf
+                  or "real_runs/k0/**/AUTHORING_CONTEXT.json" not in wf):
+              raise SystemExit('K0_EXISTING_TRIGGER_DRIFT')
+          issue_number=os.environ.get('START_ISSUE_NUMBER','')
+          run_id=os.environ.get('START_RUN_ID','')
+          if not (issue_number.isdecimal() and int(issue_number)>0 and run_id.isdecimal() and int(run_id)>0):
+              raise SystemExit('START_RECEIPT_ID_MISSING')
+          with open('K0_ENTRY_VERIFIED.json','w',encoding='utf-8') as output:
+              json.dump({'status':'K0_ENTRY_VERIFIED','source_repository':'hallo-netizen/text-start','source_issue_number':int(issue_number),'source_run_id':int(run_id),'target_repository':repo,'target_ref':ref,'start_command':'K0:start','target_workflow':workflow,'requires_current_upload':True,'publish_allowed':False}, output,ensure_ascii=False,sort_keys=True)
+          print('K0_ENTRY_VERIFIED; existing K0 uses an unchanged file trigger')
           PY
-          body="$(python3 - <<'PY'
-          import json, os
-          print(json.dumps({
-            "ref": "main",
-            "inputs": {
-              "source_run_id": os.environ["SOURCE_RUN_ID"],
-              "source_issue_number": os.environ["SOURCE_ISSUE_NUMBER"]
-            }
-          }, separators=(",", ":")))
-          PY
-          )"
-          curl --fail-with-body --silent --show-error \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/hallo-netizen/affiliate-pferdeportal/actions/workflows/text-start-pferdeatelier.yml/dispatches \
-            -d "$body"
 
-      - name: Bridge status without target token
-        if: github.event_name == 'issues' && env.TARGET_TOKEN == ''
-        run: echo "BRIDGE_PENDING_TARGET_TOKEN"
+      - name: Upload verified start authorization
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: start-authorization-${{ steps.request.outputs.project }}
+          path: |
+            START_AUTHORIZATION.json
+            K0_ENTRY_VERIFIED.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Mark issue K0 entry verified
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'K0_ENTRY_VERIFIED: pferdeatelier\nSOURCE_RUN_ID: ' + context.runId + '\nK0_START: konzept0-portal-neutral-20261002:K0_START_HERE.md\nNEXT: Continue current-upload research and writing within unchanged K0'
+            })

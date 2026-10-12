@@ -1,0 +1,59 @@
+name: text-start start guard tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  start-only-regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Start guard positive and negative tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: K0 start authorization and security assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 start.py start pferdeatelier > /tmp/k0-start-authorization.json
+          python3 - <<'PY'
+          import json, pathlib, re
+          q=json.load(open('/tmp/k0-start-authorization.json'))
+          assert q['status']=='START_AUTHORIZED'
+          assert q['target_ref']=='konzept0-portal-neutral-20261002'
+          assert q['target_workflow']=='.github/workflows/k0-authoring-context.yml'
+          assert q['canonical_start_command']=='K0:start'
+          door=pathlib.Path('.github/workflows/text-start-door.yml').read_text()
+          assert 'workflow_dispatch:' not in door
+          assert "if: github.event_name == 'issues' && github.event.action == 'opened'" in door
+          assert 'START_AUTHOR_NOT_AUTHORIZED' in door
+          assert 'START_TITLE_FORBIDDEN' in door
+          assert 'START_ISSUE_NUMBER_REQUIRED' in door
+          assert "K0_ENTRY_VERIFIED.json" in door
+          assert "'source_issue_number':int(issue_number)" in door
+          assert "'source_run_id':int(run_id)" in door
+          assert '/dispatches' not in door
+          print('K0_TEXT_START_GUARD_PASS')
+          PY
+      - name: Verify real read-only K0 entry and source receipt
+        shell: bash
+        env:
+          START_ISSUE_NUMBER: "123456"
+          START_RUN_ID: "987654"
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, pathlib, json
+          door=pathlib.Path('.github/workflows/text-start-door.yml').read_text()
+          section=door.split('      - name: Verify pinned K0 entry on production repository\n',1)[1].split('      - name: Upload verified start authorization',1)[0]
+          code=section.split("          python3 - <<'PY'\n",1)[1].split('          PY\n',1)[0]
+          code='\n'.join(line[10:] for line in code.splitlines())+'\n'
+          compile(code,'k0-start-gate.py','exec')
+          exec(code,{'__name__':'__main__'})
+          q=json.loads(pathlib.Path('K0_ENTRY_VERIFIED.json').read_text())
+          assert q['source_issue_number']==123456
+          assert q['source_run_id']==987654
+          assert q['target_ref']=='konzept0-portal-neutral-20261002'
+          assert q['status']=='K0_ENTRY_VERIFIED'
+          print('LIVE_K0_ENTRY_AND_RECEIPT_PASS')
+          PY
